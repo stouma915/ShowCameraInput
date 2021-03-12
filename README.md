@@ -1,0 +1,2 @@
+# ShowCameraInput
+DiscordのGoLiveでの音ゲー手元配信用
