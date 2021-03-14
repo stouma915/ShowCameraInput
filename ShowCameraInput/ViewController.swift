@@ -9,14 +9,13 @@ import AVFoundation
 import UIKit
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+    private var cameraDevice: AVCaptureDevice!
     private let captureSession = AVCaptureSession()
     private lazy var previewLayer: AVCaptureVideoPreviewLayer = {
         let preview = AVCaptureVideoPreviewLayer(session: self.captureSession)
         preview.videoGravity = AVLayerVideoGravity.resizeAspectFill
         return preview
     }()
-    private let videoOutput = AVCaptureVideoDataOutput()
-    private var cameraDevice: AVCaptureDevice!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,9 +29,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         self.captureSession.addInput(cameraInput)
         self.view.layer.addSublayer(self.previewLayer)
         self.captureSession.startRunning()
-        self.videoOutput.videoSettings = [(kCVPixelBufferPixelFormatTypeKey as NSString) : NSNumber(value: kCVPixelFormatType_32BGRA)] as [String : Any]
-        self.videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "my.image.handling.queue"))
-        self.captureSession.addOutput(self.videoOutput)
+        let videoOutput = AVCaptureVideoDataOutput()
+        videoOutput.videoSettings = [(kCVPixelBufferPixelFormatTypeKey as NSString) : NSNumber(value: kCVPixelFormatType_32BGRA)] as [String : Any]
+        videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "my.image.handling.queue"))
+        self.captureSession.addOutput(videoOutput)
         
         let flashlightBrightness = UserDefaults.standard.integer(forKey: "flashlight_brightness")
         if (flashlightBrightness != 0) {
