@@ -40,14 +40,14 @@
             <key>MaximumValue</key>
             <integer>10</integer>
         </dict>
-		<dict>
+	<dict>
             <key>Title</key>
             <string>About</string>
             <key>Type</key>
             <string>PSGroupSpecifier</string>
             <key>FooterText</key>
             <string>Copyright © 2021 stouma915. All rights reserved.</string>
-		</dict>
+	</dict>
         <dict>
             <key>Type</key>
             <string>PSTitleValueSpecifier</string>
