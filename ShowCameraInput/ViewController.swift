@@ -16,15 +16,15 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         return preview
     }()
     private let videoOutput = AVCaptureVideoDataOutput()
+    private var cameraDevice: AVCaptureDevice!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        var cameraDevice: AVCaptureDevice!
         if (UserDefaults.standard.bool(forKey: "use_rear_camera")) {
-            cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)!
+            self.cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)!
         } else {
-            cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)!
+            self.cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)!
         }
         let cameraInput = try! AVCaptureDeviceInput(device: cameraDevice)
         self.captureSession.addInput(cameraInput)
@@ -50,6 +50,21 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let screenSize = self.view.bounds.size
+        if let touchPoint = touches.first {
+            let x = touchPoint.location(in: self.view).y / screenSize.height
+            let y = 1.0 - touchPoint.location(in: self.view).x / screenSize.width
+            let focusPoint = CGPoint(x: x, y: y)
+            try! self.cameraDevice.lockForConfiguration()
+            self.cameraDevice.focusPointOfInterest = focusPoint
+            self.cameraDevice.focusMode = .autoFocus
+            self.cameraDevice.exposurePointOfInterest = focusPoint
+            self.cameraDevice.exposureMode = AVCaptureDevice.ExposureMode.continuousAutoExposure
+            self.cameraDevice.unlockForConfiguration()
+        }
     }
 }
 
