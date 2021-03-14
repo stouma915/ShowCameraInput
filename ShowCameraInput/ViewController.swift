@@ -66,6 +66,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         self.previewLayer.frame = self.view.bounds
     }
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     @objc func longPressed(sender: UILongPressGestureRecognizer) {
         self.view.addSubview(self.settingView)
     }
