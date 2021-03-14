@@ -23,7 +23,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         if (UserDefaults.standard.bool(forKey: "use_rear_camera")) {
             self.cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)!
         } else {
-            self.cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)!
+            self.cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .front)!
         }
         let cameraInput = try! AVCaptureDeviceInput(device: cameraDevice)
         self.captureSession.addInput(cameraInput)
@@ -34,12 +34,14 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "my.image.handling.queue"))
         self.captureSession.addOutput(videoOutput)
         
-        let flashlightBrightness = UserDefaults.standard.integer(forKey: "flashlight_brightness")
-        if (flashlightBrightness != 0) {
-            try! cameraDevice.lockForConfiguration()
-            try! cameraDevice.setTorchModeOn(level: Float(Double(flashlightBrightness) / 10.0))
-            cameraDevice.torchMode = .on
-            cameraDevice.unlockForConfiguration()
+        if (UserDefaults.standard.bool(forKey: "use_rear_camera")) {
+            let flashlightBrightness = UserDefaults.standard.integer(forKey: "flashlight_brightness")
+            if (flashlightBrightness != 0) {
+                try! cameraDevice.lockForConfiguration()
+                try! cameraDevice.setTorchModeOn(level: Float(Double(flashlightBrightness) / 10.0))
+                cameraDevice.torchMode = .on
+                cameraDevice.unlockForConfiguration()
+            }
         }
     }
     
