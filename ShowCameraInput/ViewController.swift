@@ -15,17 +15,18 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         preview.videoGravity = AVLayerVideoGravity.resizeAspectFill
         return preview
     }()
-    private var cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)!
     private let videoOutput = AVCaptureVideoDataOutput()
-    private var settingView: UIView!
-    private var settingViewTitleLabel: UILabel!
-    private var closeSettingButton: UIButton!
-    private var toggleCameraButton: UIButton!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        let cameraInput = try! AVCaptureDeviceInput(device: self.cameraDevice)
+        var cameraDevice: AVCaptureDevice!
+        if (UserDefaults.standard.bool(forKey: "use_rear_camera")) {
+            cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)!
+        } else {
+            cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)!
+        }
+        let cameraInput = try! AVCaptureDeviceInput(device: cameraDevice)
         self.captureSession.addInput(cameraInput)
         self.view.layer.addSublayer(self.previewLayer)
         self.captureSession.startRunning()
@@ -33,32 +34,13 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         self.videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "my.image.handling.queue"))
         self.captureSession.addOutput(self.videoOutput)
         
-        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(longPressed))
-        self.view.addGestureRecognizer(longPressRecognizer)
-        
-        self.settingView = UIView(frame: UIScreen.main.bounds)
-        self.settingView.backgroundColor = .white
-        
-        self.settingViewTitleLabel = UILabel(frame: CGRect(x: 10, y: 20, width: self.view.frame.width / 4, height: self.view.frame.height / 24))
-        self.settingViewTitleLabel.text = "設定"
-        self.settingViewTitleLabel.textColor = .black
-        self.settingViewTitleLabel.font = .systemFont(ofSize: self.view.frame.height / 24)
-        self.settingViewTitleLabel.adjustsFontSizeToFitWidth = true
-        self.settingView.addSubview(self.settingViewTitleLabel)
-        
-        self.toggleCameraButton = UIButton(frame: CGRect(x: (self.view.frame.width / 2) - (self.view.frame.width / 3) / 2, y: 80, width: self.view.frame.width / 3, height: self.view.frame.height / 24))
-        self.toggleCameraButton.setTitle("カメラ切り替え", for: .normal)
-        self.toggleCameraButton.backgroundColor = .black
-        self.toggleCameraButton.setTitleColor(.white, for: .normal)
-        self.toggleCameraButton.addTarget(self, action: #selector(toggleCameraButtonPushed), for: .touchUpInside)
-        self.settingView.addSubview(toggleCameraButton)
-        
-        self.closeSettingButton = UIButton(frame: CGRect(x: (self.view.frame.width - (self.view.frame.width / 8)) - 5, y: 20, width: self.view.frame.width / 8, height: self.view.frame.height / 32))
-        self.closeSettingButton.setTitle("閉じる", for: .normal)
-        self.closeSettingButton.backgroundColor = .black
-        self.closeSettingButton.setTitleColor(.white, for: .normal)
-        self.closeSettingButton.addTarget(self, action: #selector(closeSettingButtonPushed), for: .touchUpInside)
-        self.settingView.addSubview(self.closeSettingButton)
+        let flashlightBrightness = UserDefaults.standard.integer(forKey: "flashlight_brightness")
+        if (flashlightBrightness != 0) {
+            try! cameraDevice.lockForConfiguration()
+            try! cameraDevice.setTorchModeOn(level: Float(Double(flashlightBrightness) / 10.0))
+            cameraDevice.torchMode = .on
+            cameraDevice.unlockForConfiguration()
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -68,25 +50,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     override var prefersStatusBarHidden: Bool {
         return true
-    }
-    
-    @objc func longPressed(sender: UILongPressGestureRecognizer) {
-        self.view.addSubview(self.settingView)
-    }
-    
-    @objc func closeSettingButtonPushed(sender: UIButton) {
-        self.settingView.removeFromSuperview()
-    }
-    
-    @objc func toggleCameraButtonPushed(sender: UIButton) {
-        if (self.cameraDevice.position == AVCaptureDevice.Position.back) {
-            self.cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .front)!
-        } else {
-            self.cameraDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: AVMediaType.video, position: .back)!
-        }
-        let cameraInput = try! AVCaptureDeviceInput(device: self.cameraDevice)
-        self.captureSession.removeInput(self.captureSession.inputs[0])
-        self.captureSession.addInput(cameraInput)
     }
 }
 

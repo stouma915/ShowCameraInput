@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C715E10E25FE1DCA00E31275 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C715E10D25FE1DCA00E31275 /* Settings.bundle */; };
 		C783A99F25FB7EF700D75DAC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C783A99E25FB7EF700D75DAC /* AppDelegate.swift */; };
 		C783A9A125FB7EF700D75DAC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C783A9A025FB7EF700D75DAC /* SceneDelegate.swift */; };
 		C783A9A325FB7EF700D75DAC /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C783A9A225FB7EF700D75DAC /* ViewController.swift */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C715E10D25FE1DCA00E31275 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		C783A99B25FB7EF700D75DAC /* ShowCameraInput.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShowCameraInput.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C783A99E25FB7EF700D75DAC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C783A9A025FB7EF700D75DAC /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				C783A99E25FB7EF700D75DAC /* AppDelegate.swift */,
 				C783A9A025FB7EF700D75DAC /* SceneDelegate.swift */,
 				C783A9A225FB7EF700D75DAC /* ViewController.swift */,
+				C715E10D25FE1DCA00E31275 /* Settings.bundle */,
 				C783A9A425FB7EF700D75DAC /* Main.storyboard */,
 				C783A9A725FB7EF700D75DAC /* Assets.xcassets */,
 				C783A9A925FB7EF700D75DAC /* LaunchScreen.storyboard */,
@@ -231,6 +234,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C715E10E25FE1DCA00E31275 /* Settings.bundle in Resources */,
 				C783A9AB25FB7EF700D75DAC /* LaunchScreen.storyboard in Resources */,
 				C783A9A825FB7EF700D75DAC /* Assets.xcassets in Resources */,
 				C783A9A625FB7EF700D75DAC /* Main.storyboard in Resources */,
